@@ -1,86 +1,87 @@
-let tableCreated = false;
+$(document).ready(function () {
+    let tableCreated = false;
 
-document.getElementById('createClassTable').addEventListener('click', () => {
-    tableCreated = true;
-    document.getElementById('formSection').style.display = 'block';
-    alert('Class Table Created');
-});
-
-document.getElementById('createOtherTable').addEventListener('click', () => {
-    tableCreated = true;
-    document.getElementById('formSection').style.display = 'block';
-    alert('Other Table Created');
-});
-
-document.getElementById('viewTable').addEventListener('click', () => {
-    if (!tableCreated) {
-        alert('Please Create a Table First');
-    } else {
-        document.getElementById('viewSection').style.display = 'block';
-        displayCourses();
-    }
-});
-
-document.getElementById('saveCourse').addEventListener('click', () => {
-    const courseCode = document.getElementById('courseCode').value;
-    const courseTitle = document.getElementById('courseTitle').value;
-    const lecturerName = document.getElementById('lecturerName').value;
-    const building = document.getElementById('building').value;
-    const roomNumber = document.getElementById('roomNumber').value;
-    const courseDay = document.getElementById('courseDay').value;
-    const courseTimeFrom = document.getElementById('courseTimeFrom').value;
-    const courseTimeTo = document.getElementById('courseTimeTo').value;
-
-    if (courseCode && courseTitle) {
-        const course = {
-            courseCode,
-            courseTitle,
-            lecturerName,
-            building,
-            roomNumber,
-            courseDay,
-            courseTimeFrom,
-            courseTimeTo
-        };
-        
-        saveCourse(course);
-        alert('Course Saved');
-        clearForm();
-    } else {
-        alert('Please fill in all required fields.');
-    }
-});
-
-document.getElementById('viewCourses').addEventListener('click', () => {
-    document.getElementById('viewSection').style.display = 'block';
-    displayCourses();
-});
-
-function saveCourse(course) {
-    let courses = JSON.parse(localStorage.getItem('courses')) || [];
-    courses.push(course);
-    localStorage.setItem('courses', JSON.stringify(courses));
-}
-
-function displayCourses() {
-    let courses = JSON.parse(localStorage.getItem('courses')) || [];
-    const courseList = document.getElementById('courseList');
-    courseList.innerHTML = '';
-    
-    courses.forEach((course, index) => {
-        let listItem = document.createElement('li');
-        listItem.textContent = `${course.courseCode}: ${course.courseTitle} - ${course.lecturerName}`;
-        courseList.appendChild(listItem);
+    $('#createClassTable').click(function () {
+        tableCreated = true;
+        $('#formSection').show();
+        alert('Class Table Created');
     });
-}
 
-function clearForm() {
-    document.getElementById('courseCode').value = '';
-    document.getElementById('courseTitle').value = '';
-    document.getElementById('lecturerName').value = '';
-    document.getElementById('building').value = '';
-    document.getElementById('roomNumber').value = '';
-    document.getElementById('courseDay').value = '';
-    document.getElementById('courseTimeFrom').value = '';
-    document.getElementById('courseTimeTo').value = '';
-}
+    $('#createOtherTable').click(function () {
+        tableCreated = true;
+        $('#formSection').show();
+        alert('Other Table Created');
+    });
+
+    $('#viewTable').click(function () {
+        if (!tableCreated) {
+            alert('Please Create a Table First');
+        } else {
+            $('#viewSection').show();
+            displayCourses();
+        }
+    });
+
+    $('#saveCourse').click(function () {
+        const courseCode = $('#courseCode').val();
+        const courseTitle = $('#courseTitle').val();
+        const lecturerName = $('#lecturerName').val();
+        const building = $('#building').val();
+        const roomNumber = $('#roomNumber').val();
+        const courseDay = $('#courseDay').val();
+        const courseTimeFrom = $('#courseTimeFrom').val();
+        const courseTimeTo = $('#courseTimeTo').val();
+
+        if (courseCode && courseTitle) {
+            const course = {
+                courseCode,
+                courseTitle,
+                lecturerName,
+                building,
+                roomNumber,
+                courseDay,
+                courseTimeFrom,
+                courseTimeTo
+            };
+            
+            saveCourse(course);
+            alert('Course Saved');
+            clearForm();
+        } else {
+            alert('Please fill in all required fields.');
+        }
+    });
+
+    $('#viewCourses').click(function () {
+        $('#viewSection').show();
+        displayCourses();
+    });
+
+    function saveCourse(course) {
+        let courses = JSON.parse(localStorage.getItem('courses')) || [];
+        courses.push(course);
+        localStorage.setItem('courses', JSON.stringify(courses));
+    }
+
+    function displayCourses() {
+        let courses = JSON.parse(localStorage.getItem('courses')) || [];
+        const courseList = $('#courseList');
+        courseList.empty();
+        
+        $.each(courses, function (index, course) {
+            let listItem = $('<li class="list-group-item"></li>').text(`${course.courseCode}: ${course.courseTitle} - ${course.lecturerName}`);
+            courseList.append(listItem);
+        });
+    }
+
+    function clearForm() {
+        $('#courseCode').val('');
+        $('#courseTitle').val('');
+        $('#lecturerName').val('');
+        $('#building').val('');
+        $('#roomNumber').val('');
+        $('#courseDay').val('');
+        $('#courseTimeFrom').val('');
+        $('#courseTimeTo').val('');
+    }
+});
