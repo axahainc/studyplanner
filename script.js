@@ -181,3 +181,40 @@ $(document).ready(function () {
         $('#courseTimeTo').val('');
     }
 });
+$(document).on('pageinit', '#createClassTablePage', function () {
+    $('#classTableForm').on('submit', function (event) {
+        event.preventDefault();
+        // Handle form submission for creating a class table
+        const courseCode = $('#courseCode').val();
+        const courseTitle = $('#courseTitle').val();
+        const lecturerName = $('#lecturerName').val();
+        const building = $('#building').val();
+        const roomNumber = $('#roomNumber').val();
+        const courseDay = $('#courseDay').val();
+        const courseTimeFrom = $('#courseTimeFrom').val();
+        const courseTimeTo = $('#courseTimeTo').val();
+        // Save data logic here
+        alert('Class Table Saved');
+    });
+});
+
+$(document).on('pageinit', '#createReminderPage', function () {
+    $('#reminderForm').on('submit', function (event) {
+        event.preventDefault();
+        // Handle form submission for creating a reminder
+        const reminderTitle = $('#reminderTitle').val();
+        const reminderTime = $('#reminderTime').val();
+        // Save reminder logic here
+        alert('Reminder Saved');
+    });
+});
+
+$(document).on('pageinit', '#takeNotesPage', function () {
+    $('#noteForm').on('submit', function (event) {
+        event.preventDefault();
+        // Handle form submission for taking notes
+        const noteContent = $('#noteContent').val();
+        // Save note logic here
+        alert('Note Saved');
+    });
+});
