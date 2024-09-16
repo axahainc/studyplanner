@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STUDY PLANNER</title>
     <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
     <style>
-        /* Additional custom styles */
         .ui-page .ui-content {
             padding: 15px;
         }
@@ -17,6 +17,10 @@
         }
         .form-section {
             margin-top: 20px;
+        }
+        #calendar {
+            max-width: 100%;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -30,6 +34,8 @@
             <a href="#manageClassesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Classes</a>
             <a href="#manageRemindersPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Reminders</a>
             <a href="#manageNotesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Notes</a>
+            <a href="#calendarPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">View Calendar</a>
+            <a href="#manageCalendarPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Calendar</a>
         </div>
     </div>
 
@@ -39,10 +45,8 @@
             <h1>Manage Classes</h1>
         </div>
         <div data-role="content">
-            <a href="#createClassPage" class="ui-btn ui-btn-b">Add New Class</a>
-            <ul id="classList" data-role="listview" data-inset="true">
-                <!-- Dynamic content for class list -->
-            </ul>
+            <ul id="classList" data-role="listview"></ul>
+            <a href="#createClassPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add New Class</a>
         </div>
     </div>
 
@@ -51,34 +55,42 @@
         <div data-role="header">
             <h1>Create/Edit Class</h1>
         </div>
-        <div data-role="content" class="form-section">
+        <div data-role="content">
             <form id="classForm">
                 <input type="hidden" id="classId">
-                <label for="courseCode">Course Code:</label>
-                <input type="text" id="courseCode" placeholder="Enter Course Code">
-
-                <label for="courseTitle">Course Title:</label>
-                <input type="text" id="courseTitle" placeholder="Enter Course Title">
-
-                <label for="lecturerName">Lecturer Name:</label>
-                <input type="text" id="lecturerName" placeholder="Enter Lecturer Name">
-
-                <label for="building">Building:</label>
-                <input type="text" id="building" placeholder="Lecture Venue">
-
-                <label for="roomNumber">Room Number:</label>
-                <input type="text" id="roomNumber" placeholder="Enter Room Number">
-
-                <label for="courseDay">Course Day:</label>
-                <input type="text" id="courseDay" placeholder="Course Day">
-
-                <label for="courseTimeFrom">From:</label>
-                <input type="time" id="courseTimeFrom">
-
-                <label for="courseTimeTo">To:</label>
-                <input type="time" id="courseTimeTo">
-
-                <button type="submit" class="ui-btn ui-btn-b">Save</button>
+                <div class="form-section">
+                    <label for="courseCode">Course Code:</label>
+                    <input type="text" id="courseCode" name="courseCode" required>
+                </div>
+                <div class="form-section">
+                    <label for="courseTitle">Course Title:</label>
+                    <input type="text" id="courseTitle" name="courseTitle" required>
+                </div>
+                <div class="form-section">
+                    <label for="lecturerName">Lecturer Name:</label>
+                    <input type="text" id="lecturerName" name="lecturerName">
+                </div>
+                <div class="form-section">
+                    <label for="building">Building:</label>
+                    <input type="text" id="building" name="building">
+                </div>
+                <div class="form-section">
+                    <label for="roomNumber">Room Number:</label>
+                    <input type="text" id="roomNumber" name="roomNumber">
+                </div>
+                <div class="form-section">
+                    <label for="courseDay">Course Day:</label>
+                    <input type="text" id="courseDay" name="courseDay">
+                </div>
+                <div class="form-section">
+                    <label for="courseTimeFrom">Course Time From:</label>
+                    <input type="time" id="courseTimeFrom" name="courseTimeFrom">
+                </div>
+                <div class="form-section">
+                    <label for="courseTimeTo">Course Time To:</label>
+                    <input type="time" id="courseTimeTo" name="courseTimeTo">
+                </div>
+                <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Save Class</button>
             </form>
         </div>
     </div>
@@ -89,10 +101,8 @@
             <h1>Manage Reminders</h1>
         </div>
         <div data-role="content">
-            <a href="#createReminderPage" class="ui-btn ui-btn-b">Add New Reminder</a>
-            <ul id="reminderList" data-role="listview" data-inset="true">
-                <!-- Dynamic content for reminder list -->
-            </ul>
+            <ul id="reminderList" data-role="listview"></ul>
+            <a href="#createReminderPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add New Reminder</a>
         </div>
     </div>
 
@@ -101,16 +111,18 @@
         <div data-role="header">
             <h1>Create/Edit Reminder</h1>
         </div>
-        <div data-role="content" class="form-section">
+        <div data-role="content">
             <form id="reminderForm">
                 <input type="hidden" id="reminderId">
-                <label for="reminderTitle">Reminder Title:</label>
-                <input type="text" id="reminderTitle" placeholder="Enter Reminder Title">
-
-                <label for="reminderTime">Reminder Time:</label>
-                <input type="datetime-local" id="reminderTime">
-
-                <button type="submit" class="ui-btn ui-btn-b">Save Reminder</button>
+                <div class="form-section">
+                    <label for="reminderTitle">Reminder Title:</label>
+                    <input type="text" id="reminderTitle" name="reminderTitle" required>
+                </div>
+                <div class="form-section">
+                    <label for="reminderTime">Reminder Time:</label>
+                    <input type="datetime-local" id="reminderTime" name="reminderTime" required>
+                </div>
+                <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Save Reminder</button>
             </form>
         </div>
     </div>
@@ -121,10 +133,8 @@
             <h1>Manage Notes</h1>
         </div>
         <div data-role="content">
-            <a href="#createNotePage" class="ui-btn ui-btn-b">Add New Note</a>
-            <ul id="noteList" data-role="listview" data-inset="true">
-                <!-- Dynamic content for note list -->
-            </ul>
+            <ul id="noteList" data-role="listview"></ul>
+            <a href="#createNotePage" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add New Note</a>
         </div>
     </div>
 
@@ -133,18 +143,49 @@
         <div data-role="header">
             <h1>Create/Edit Note</h1>
         </div>
-        <div data-role="content" class="form-section">
+        <div data-role="content">
             <form id="noteForm">
                 <input type="hidden" id="noteId">
-                <label for="noteContent">Notes:</label>
-                <textarea id="noteContent" placeholder="Write your notes here..."></textarea>
-                <button type="submit" class="ui-btn ui-btn-b">Save Note</button>
+                <div class="form-section">
+                    <label for="noteTitle">Note Title:</label>
+                    <input type="text" id="noteTitle" name="noteTitle" required>
+                </div>
+                <div class="form-section">
+                    <label for="noteContent">Note Content:</label>
+                    <textarea id="noteContent" name="noteContent" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Save Note</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Calendar Page -->
+    <div data-role="page" id="calendarPage">
+        <div data-role="header">
+            <h1>Calendar</h1>
+        </div>
+        <div data-role="content">
+            <div id="calendar"></div>
+        </div>
+    </div>
+
+    <!-- Manage Calendar Page -->
+    <div data-role="page" id="manageCalendarPage">
+        <div data-role="header">
+            <h1>Manage Calendar</h1>
+        </div>
+        <div data-role="content">
+            <button id="addEventBtn" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add Calendar Event</button>
+            <div id="calendarEventsList">
+                <ul id="eventList" data-role="listview"></ul>
+            </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
