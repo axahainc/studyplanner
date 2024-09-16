@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Course Management</h1>
+        <button id="createClassTable">Create Class Table</button>
+        <button id="createOtherTable">Create Other Table</button>
+        <button id="viewTable">View Tables</button>
+        
+        <div id="formSection" style="display:none;">
+            <h2>Enter Course Details</h2>
+            <input type="text" id="courseCode" placeholder="Enter Course Code"><br>
+            <input type="text" id="courseTitle" placeholder="Enter Course Title"><br>
+            <input type="text" id="lecturerName" placeholder="Enter Lecturer Name"><br>
+            <input type="text" id="building" placeholder="Lecture Venue"><br>
+            <input type="text" id="roomNumber" placeholder="Enter Room Number"><br>
+            <input type="text" id="courseDay" placeholder="Course Day"><br>
+            <label for="courseTimeFrom">From: </label>
+            <input type="time" id="courseTimeFrom"><br>
+            <label for="courseTimeTo">To: </label>
+            <input type="time" id="courseTimeTo"><br>
+            <button id="saveCourse">Save</button>
+            <button id="viewCourses">View</button>
+        </div>
+
+        <div id="viewSection" style="display:none;">
+            <h2>View Courses</h2>
+            <ul id="courseList"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
