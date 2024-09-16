@@ -22,6 +22,12 @@
             max-width: 100%;
             margin: 0 auto;
         }
+        .ui-footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
@@ -31,11 +37,18 @@
             <h1>STUDY PLANNER</h1>
         </div>
         <div data-role="content">
-            <a href="#manageClassesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Classes</a>
-            <a href="#manageRemindersPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Reminders</a>
-            <a href="#manageNotesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Notes</a>
-            <a href="#calendarPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">View Calendar</a>
-            <a href="#manageCalendarPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Calendar</a>
+            <h2>Welcome to the Study Planner App</h2>
+            <p>Select a feature from the navigation below to get started.</p>
+        </div>
+        <div data-role="footer" data-position="fixed" data-id="main-footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#manageClassesPage" data-icon="grid">Classes</a></li>
+                    <li><a href="#manageRemindersPage" data-icon="star">Reminders</a></li>
+                    <li><a href="#manageNotesPage" data-icon="edit">Notes</a></li>
+                    <li><a href="#calendarPage" data-icon="calendar">Calendar</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -47,6 +60,16 @@
         <div data-role="content">
             <ul id="classList" data-role="listview"></ul>
             <a href="#createClassPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add New Class</a>
+        </div>
+        <div data-role="footer" data-position="fixed" data-id="main-footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="home">Home</a></li>
+                    <li><a href="#manageRemindersPage" data-icon="star">Reminders</a></li>
+                    <li><a href="#manageNotesPage" data-icon="edit">Notes</a></li>
+                    <li><a href="#calendarPage" data-icon="calendar">Calendar</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -104,6 +127,16 @@
             <ul id="reminderList" data-role="listview"></ul>
             <a href="#createReminderPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add New Reminder</a>
         </div>
+        <div data-role="footer" data-position="fixed" data-id="main-footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="home">Home</a></li>
+                    <li><a href="#manageClassesPage" data-icon="grid">Classes</a></li>
+                    <li><a href="#manageNotesPage" data-icon="edit">Notes</a></li>
+                    <li><a href="#calendarPage" data-icon="calendar">Calendar</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- Create/Edit Reminder Page -->
@@ -136,6 +169,16 @@
             <ul id="noteList" data-role="listview"></ul>
             <a href="#createNotePage" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add New Note</a>
         </div>
+        <div data-role="footer" data-position="fixed" data-id="main-footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="home">Home</a></li>
+                    <li><a href="#manageClassesPage" data-icon="grid">Classes</a></li>
+                    <li><a href="#manageRemindersPage" data-icon="star">Reminders</a></li>
+                    <li><a href="#calendarPage" data-icon="calendar">Calendar</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <!-- Create/Edit Note Page -->
@@ -152,7 +195,7 @@
                 </div>
                 <div class="form-section">
                     <label for="noteContent">Note Content:</label>
-                    <textarea id="noteContent" name="noteContent" rows="4" required></textarea>
+                    <textarea id="noteContent" name="noteContent" required></textarea>
                 </div>
                 <button type="submit" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Save Note</button>
             </form>
@@ -166,18 +209,16 @@
         </div>
         <div data-role="content">
             <div id="calendar"></div>
+            <button id="addEventBtn" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add Event</button>
         </div>
-    </div>
-
-    <!-- Manage Calendar Page -->
-    <div data-role="page" id="manageCalendarPage">
-        <div data-role="header">
-            <h1>Manage Calendar</h1>
-        </div>
-        <div data-role="content">
-            <button id="addEventBtn" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Add Calendar Event</button>
-            <div id="calendarEventsList">
-                <ul id="eventList" data-role="listview"></ul>
+        <div data-role="footer" data-position="fixed" data-id="main-footer">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#home" data-icon="home">Home</a></li>
+                    <li><a href="#manageClassesPage" data-icon="grid">Classes</a></li>
+                    <li><a href="#manageRemindersPage" data-icon="star">Reminders</a></li>
+                    <li><a href="#manageNotesPage" data-icon="edit">Notes</a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -186,6 +227,6 @@
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
