@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STUDY PLANNER</title>
+    <title>Course Management App</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">STUDY PLANNER</h1>
+        <h1 class="text-center mb-4">Course Management</h1>
         <div class="text-center mb-4">
-            <button id="createClassTable" class="btn btn-primary mr-2">Create Class</button>
+            <button id="createClassTable" class="btn btn-primary mr-2">Create Class Table</button>
             <button id="createOtherTable" class="btn btn-secondary mr-2">Create Other Table</button>
             <button id="viewTable" class="btn btn-info">View Tables</button>
+            <button id="createReminder" class="btn btn-warning mr-2">Create Reminder</button>
+            <button id="createCalendar" class="btn btn-dark mr-2">Create Calendar</button>
+            <button id="takeNotes" class="btn btn-success">Take Notes</button>
         </div>
 
+        <!-- Course Form Section -->
         <div id="formSection" class="card p-4 mb-4" style="display:none;">
             <h2>Enter Course Details</h2>
             <div class="form-group">
@@ -50,14 +54,47 @@
             <button id="viewCourses" class="btn btn-info">View</button>
         </div>
 
+        <!-- Reminder Section -->
+        <div id="reminderSection" class="card p-4 mb-4" style="display:none;">
+            <h2>Create Reminder</h2>
+            <div class="form-group">
+                <input type="text" id="reminderTitle" class="form-control" placeholder="Reminder Title">
+            </div>
+            <div class="form-group">
+                <input type="datetime-local" id="reminderTime" class="form-control">
+            </div>
+            <button id="saveReminder" class="btn btn-success">Save Reminder</button>
+        </div>
+
+        <!-- Calendar Section -->
+        <div id="calendarSection" class="card p-4 mb-4" style="display:none;">
+            <h2>Your Calendar</h2>
+            <div id="calendar"></div>
+        </div>
+
+        <!-- Notes Section -->
+        <div id="notesSection" class="card p-4 mb-4" style="display:none;">
+            <h2>Take Notes</h2>
+            <div class="form-group">
+                <textarea id="noteContent" class="form-control" rows="4" placeholder="Write your notes here..."></textarea>
+            </div>
+            <button id="saveNote" class="btn btn-success">Save Note</button>
+        </div>
+
+        <!-- View Section for Courses, Reminders, and Notes -->
         <div id="viewSection" class="card p-4" style="display:none;">
             <h2>View Courses</h2>
-            <ul id="courseList" class="list-group"></ul>
+            <ul id="courseList" class="list-group mb-4"></ul>
+            <h2>View Reminders</h2>
+            <ul id="reminderList" class="list-group mb-4"></ul>
+            <h2>View Notes</h2>
+            <ul id="noteList" class="list-group"></ul>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
