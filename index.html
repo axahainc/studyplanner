@@ -3,20 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Management App</title>
+    <title>STUDY PLANNER</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Custom styles for larger buttons */
+        .menu-button {
+            padding: 20px;
+            font-size: 1.5rem;
+            width: 100%;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Course Management</h1>
-        <div class="text-center mb-4">
-            <button id="createClassTable" class="btn btn-primary mr-2">Create Class Table</button>
-            <button id="createOtherTable" class="btn btn-secondary mr-2">Create Other Table</button>
-            <button id="viewTable" class="btn btn-info">View Tables</button>
-            <button id="createReminder" class="btn btn-warning mr-2">Create Reminder</button>
-            <button id="createCalendar" class="btn btn-dark mr-2">Create Calendar</button>
-            <button id="takeNotes" class="btn btn-success">Take Notes</button>
+        <h1 class="text-center mb-4">STUDY PLANNER</h1>
+        
+        <!-- Grid layout for buttons -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <button id="createClassTable" class="btn btn-primary menu-button">Create Class Table</button>
+            </div>
+            <div class="col-md-4 mb-3">
+                <button id="createOtherTable" class="btn btn-secondary menu-button">Create Other Table</button>
+            </div>
+            <div class="col-md-4 mb-3">
+                <button id="viewTable" class="btn btn-info menu-button">View Tables</button>
+            </div>
+            <div class="col-md-4 mb-3">
+                <button id="createReminder" class="btn btn-warning menu-button">Create Reminder</button>
+            </div>
+            <div class="col-md-4 mb-3">
+                <button id="createCalendar" class="btn btn-dark menu-button">Create Calendar</button>
+            </div>
+            <div class="col-md-4 mb-3">
+                <button id="takeNotes" class="btn btn-success menu-button">Take Notes</button>
+            </div>
         </div>
 
         <!-- Course Form Section -->
