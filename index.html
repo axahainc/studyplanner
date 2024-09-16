@@ -4,122 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STUDY PLANNER</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <style>
-        /* Custom styles for larger buttons */
-        .menu-button {
-            padding: 20px;
-            font-size: 1.5rem;
-            width: 100%;
+        /* Additional custom styles */
+        .ui-page .ui-content {
+            padding: 15px;
         }
-        .card {
-            margin-bottom: 20px;
+        .menu-button {
+            font-size: 1.2rem;
+            padding: 20px;
+            margin-bottom: 10px;
+        }
+        .form-section {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">STUDY PLANNER</h1>
-        
-        <!-- Grid layout for buttons -->
-        <div class="row mb-4">
-            <div class="col-md-4 mb-3">
-                <button id="createClassTable" class="btn btn-primary menu-button">Create Class Table</button>
-            </div>
-            <div class="col-md-4 mb-3">
-                <button id="createOtherTable" class="btn btn-secondary menu-button">Create Other Table</button>
-            </div>
-            <div class="col-md-4 mb-3">
-                <button id="viewTable" class="btn btn-info menu-button">View Tables</button>
-            </div>
-            <div class="col-md-4 mb-3">
-                <button id="createReminder" class="btn btn-warning menu-button">Create Reminder</button>
-            </div>
-            <div class="col-md-4 mb-3">
-                <button id="createCalendar" class="btn btn-dark menu-button">Create Calendar</button>
-            </div>
-            <div class="col-md-4 mb-3">
-                <button id="takeNotes" class="btn btn-success menu-button">Take Notes</button>
-            </div>
+    <!-- Home Page -->
+    <div data-role="page" id="home">
+        <div data-role="header">
+            <h1>STUDY PLANNER</h1>
         </div>
-
-        <!-- Course Form Section -->
-        <div id="formSection" class="card p-4 mb-4" style="display:none;">
-            <h2>Enter Course Details</h2>
-            <div class="form-group">
-                <input type="text" id="courseCode" class="form-control" placeholder="Enter Course Code">
-            </div>
-            <div class="form-group">
-                <input type="text" id="courseTitle" class="form-control" placeholder="Enter Course Title">
-            </div>
-            <div class="form-group">
-                <input type="text" id="lecturerName" class="form-control" placeholder="Enter Lecturer Name">
-            </div>
-            <div class="form-group">
-                <input type="text" id="building" class="form-control" placeholder="Lecture Venue">
-            </div>
-            <div class="form-group">
-                <input type="text" id="roomNumber" class="form-control" placeholder="Enter Room Number">
-            </div>
-            <div class="form-group">
-                <input type="text" id="courseDay" class="form-control" placeholder="Course Day">
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="courseTimeFrom">From:</label>
-                    <input type="time" id="courseTimeFrom" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="courseTimeTo">To:</label>
-                    <input type="time" id="courseTimeTo" class="form-control">
-                </div>
-            </div>
-            <button id="saveCourse" class="btn btn-success">Save</button>
-            <button id="viewCourses" class="btn btn-info">View</button>
-        </div>
-
-        <!-- Reminder Section -->
-        <div id="reminderSection" class="card p-4 mb-4" style="display:none;">
-            <h2>Create Reminder</h2>
-            <div class="form-group">
-                <input type="text" id="reminderTitle" class="form-control" placeholder="Reminder Title">
-            </div>
-            <div class="form-group">
-                <input type="datetime-local" id="reminderTime" class="form-control">
-            </div>
-            <button id="saveReminder" class="btn btn-success">Save Reminder</button>
-        </div>
-
-        <!-- Calendar Section -->
-        <div id="calendarSection" class="card p-4 mb-4" style="display:none;">
-            <h2>Your Calendar</h2>
-            <div id="calendar"></div>
-        </div>
-
-        <!-- Notes Section -->
-        <div id="notesSection" class="card p-4 mb-4" style="display:none;">
-            <h2>Take Notes</h2>
-            <div class="form-group">
-                <textarea id="noteContent" class="form-control" rows="4" placeholder="Write your notes here..."></textarea>
-            </div>
-            <button id="saveNote" class="btn btn-success">Save Note</button>
-        </div>
-
-        <!-- View Section for Courses, Reminders, and Notes -->
-        <div id="viewSection" class="card p-4" style="display:none;">
-            <h2>View Courses</h2>
-            <ul id="courseList" class="list-group mb-4"></ul>
-            <h2>View Reminders</h2>
-            <ul id="reminderList" class="list-group mb-4"></ul>
-            <h2>View Notes</h2>
-            <ul id="noteList" class="list-group"></ul>
+        <div data-role="content">
+            <a href="#createClassTablePage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Create Class Table</a>
+            <a href="#createOtherTablePage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Create Other Table</a>
+            <a href="#viewTablesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">View Tables</a>
+            <a href="#createReminderPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Create Reminder</a>
+            <a href="#createCalendarPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Create Calendar</a>
+            <a href="#takeNotesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Take Notes</a>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- Create Class Table Page -->
+    <div data-role="page" id="createClassTablePage">
+        <div data-role="header">
+            <h1>Create Class Table</h1>
+        </div>
+        <div data-role="content" class="form-section">
+            <form id="classTableForm">
+                <label for="courseCode">Course Code:</label>
+                <input type="text" id="courseCode" placeholder="Enter Course Code">
+
+                <label for="courseTitle">Course Title:</label>
+                <input type="text" id="courseTitle" placeholder="Enter Course Title">
+
+                <label for="lecturerName">Lecturer Name:</label>
+                <input type="text" id="lecturerName" placeholder="Enter Lecturer Name">
+
+                <label for="building">Building:</label>
+                <input type="text" id="building" placeholder="Lecture Venue">
+
+                <label for="roomNumber">Room Number:</label>
+                <input type="text" id="roomNumber" placeholder="Enter Room Number">
+
+                <label for="courseDay">Course Day:</label>
+                <input type="text" id="courseDay" placeholder="Course Day">
+
+                <label for="courseTimeFrom">From:</label>
+                <input type="time" id="courseTimeFrom">
+
+                <label for="courseTimeTo">To:</label>
+                <input type="time" id="courseTimeTo">
+
+                <button type="submit" class="ui-btn ui-btn-b">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Other Table Page -->
+    <div data-role="page" id="createOtherTablePage">
+        <div data-role="header">
+            <h1>Create Other Table</h1>
+        </div>
+        <div data-role="content" class="form-section">
+            <!-- Form for other table creation can go here -->
+            <p>Additional table creation form will go here.</p>
+        </div>
+    </div>
+
+    <!-- View Tables Page -->
+    <div data-role="page" id="viewTablesPage">
+        <div data-role="header">
+            <h1>View Tables</h1>
+        </div>
+        <div data-role="content">
+            <ul id="courseList" data-role="listview" data-inset="true">
+                <!-- Dynamic content for course list -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Create Reminder Page -->
+    <div data-role="page" id="createReminderPage">
+        <div data-role="header">
+            <h1>Create Reminder</h1>
+        </div>
+        <div data-role="content" class="form-section">
+            <form id="reminderForm">
+                <label for="reminderTitle">Reminder Title:</label>
+                <input type="text" id="reminderTitle" placeholder="Enter Reminder Title">
+
+                <label for="reminderTime">Reminder Time:</label>
+                <input type="datetime-local" id="reminderTime">
+
+                <button type="submit" class="ui-btn ui-btn-b">Save Reminder</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Calendar Page -->
+    <div data-role="page" id="createCalendarPage">
+        <div data-role="header">
+            <h1>Create Calendar</h1>
+        </div>
+        <div data-role="content">
+            <p>Calendar integration will go here.</p>
+        </div>
+    </div>
+
+    <!-- Take Notes Page -->
+    <div data-role="page" id="takeNotesPage">
+        <div data-role="header">
+            <h1>Take Notes</h1>
+        </div>
+        <div data-role="content" class="form-section">
+            <form id="noteForm">
+                <label for="noteContent">Notes:</label>
+                <textarea id="noteContent" placeholder="Write your notes here..."></textarea>
+                <button type="submit" class="ui-btn ui-btn-b">Save Note</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
