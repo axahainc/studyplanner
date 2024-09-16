@@ -27,22 +27,33 @@
             <h1>STUDY PLANNER</h1>
         </div>
         <div data-role="content">
-            <a href="#createClassTablePage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Create Class Table</a>
-            <a href="#createOtherTablePage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Create Other Table</a>
-            <a href="#viewTablesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">View Tables</a>
-            <a href="#createReminderPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Create Reminder</a>
-            <a href="#createCalendarPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Create Calendar</a>
-            <a href="#takeNotesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Take Notes</a>
+            <a href="#manageClassesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Classes</a>
+            <a href="#manageRemindersPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Reminders</a>
+            <a href="#manageNotesPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b menu-button">Manage Notes</a>
         </div>
     </div>
 
-    <!-- Create Class Table Page -->
-    <div data-role="page" id="createClassTablePage">
+    <!-- Manage Classes Page -->
+    <div data-role="page" id="manageClassesPage">
         <div data-role="header">
-            <h1>Create Class Table</h1>
+            <h1>Manage Classes</h1>
+        </div>
+        <div data-role="content">
+            <a href="#createClassPage" class="ui-btn ui-btn-b">Add New Class</a>
+            <ul id="classList" data-role="listview" data-inset="true">
+                <!-- Dynamic content for class list -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Create/Edit Class Page -->
+    <div data-role="page" id="createClassPage">
+        <div data-role="header">
+            <h1>Create/Edit Class</h1>
         </div>
         <div data-role="content" class="form-section">
-            <form id="classTableForm">
+            <form id="classForm">
+                <input type="hidden" id="classId">
                 <label for="courseCode">Course Code:</label>
                 <input type="text" id="courseCode" placeholder="Enter Course Code">
 
@@ -72,36 +83,27 @@
         </div>
     </div>
 
-    <!-- Create Other Table Page -->
-    <div data-role="page" id="createOtherTablePage">
+    <!-- Manage Reminders Page -->
+    <div data-role="page" id="manageRemindersPage">
         <div data-role="header">
-            <h1>Create Other Table</h1>
-        </div>
-        <div data-role="content" class="form-section">
-            <!-- Form for other table creation can go here -->
-            <p>Additional table creation form will go here.</p>
-        </div>
-    </div>
-
-    <!-- View Tables Page -->
-    <div data-role="page" id="viewTablesPage">
-        <div data-role="header">
-            <h1>View Tables</h1>
+            <h1>Manage Reminders</h1>
         </div>
         <div data-role="content">
-            <ul id="courseList" data-role="listview" data-inset="true">
-                <!-- Dynamic content for course list -->
+            <a href="#createReminderPage" class="ui-btn ui-btn-b">Add New Reminder</a>
+            <ul id="reminderList" data-role="listview" data-inset="true">
+                <!-- Dynamic content for reminder list -->
             </ul>
         </div>
     </div>
 
-    <!-- Create Reminder Page -->
+    <!-- Create/Edit Reminder Page -->
     <div data-role="page" id="createReminderPage">
         <div data-role="header">
-            <h1>Create Reminder</h1>
+            <h1>Create/Edit Reminder</h1>
         </div>
         <div data-role="content" class="form-section">
             <form id="reminderForm">
+                <input type="hidden" id="reminderId">
                 <label for="reminderTitle">Reminder Title:</label>
                 <input type="text" id="reminderTitle" placeholder="Enter Reminder Title">
 
@@ -113,23 +115,27 @@
         </div>
     </div>
 
-    <!-- Create Calendar Page -->
-    <div data-role="page" id="createCalendarPage">
+    <!-- Manage Notes Page -->
+    <div data-role="page" id="manageNotesPage">
         <div data-role="header">
-            <h1>Create Calendar</h1>
+            <h1>Manage Notes</h1>
         </div>
         <div data-role="content">
-            <p>Calendar integration will go here.</p>
+            <a href="#createNotePage" class="ui-btn ui-btn-b">Add New Note</a>
+            <ul id="noteList" data-role="listview" data-inset="true">
+                <!-- Dynamic content for note list -->
+            </ul>
         </div>
     </div>
 
-    <!-- Take Notes Page -->
-    <div data-role="page" id="takeNotesPage">
+    <!-- Create/Edit Note Page -->
+    <div data-role="page" id="createNotePage">
         <div data-role="header">
-            <h1>Take Notes</h1>
+            <h1>Create/Edit Note</h1>
         </div>
         <div data-role="content" class="form-section">
             <form id="noteForm">
+                <input type="hidden" id="noteId">
                 <label for="noteContent">Notes:</label>
                 <textarea id="noteContent" placeholder="Write your notes here..."></textarea>
                 <button type="submit" class="ui-btn ui-btn-b">Save Note</button>
