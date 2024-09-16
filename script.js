@@ -2,6 +2,7 @@ $(document).ready(function () {
     let classes = [];
     let reminders = [];
     let notes = [];
+    let events = [];
 
     // Manage Classes - CRUD Operations
     function renderClasses() {
@@ -9,18 +10,42 @@ $(document).ready(function () {
         classes.forEach((item, index) => {
             $('#classList').append(`
                 <li>
-                    <a href="#createClassPage" data-id="${index}">${item.courseCode} - ${item.courseTitle}</a>
-                    <a href="#" class="delete-class" data-id="${index}">Delete</a>
+                    <h2>${item.courseCode} - ${item.courseTitle}</h2>
+                    <p>Lecturer: ${item.lecturerName}</p>
+                    <p>Building: ${item.building}</p>
+                    <p>Room: ${item.roomNumber}</p>
+                    <p>Day: ${item.courseDay}</p>
+                    <p>Time: ${item.courseTimeFrom} - ${item.courseTimeTo}</p>
+                    <a href="#createClassPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b" onclick="editClass(${index})">Edit</a>
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-b" onclick="deleteClass(${index})">Delete</a>
                 </li>
             `);
         });
-        $('#classList').listview('refresh');
     }
 
-    $('#classForm').on('submit', function (event) {
+    function editClass(index) {
+        const item = classes[index];
+        $('#classId').val(index);
+        $('#courseCode').val(item.courseCode);
+        $('#courseTitle').val(item.courseTitle);
+        $('#lecturerName').val(item.lecturerName);
+        $('#building').val(item.building);
+        $('#roomNumber').val(item.roomNumber);
+        $('#courseDay').val(item.courseDay);
+        $('#courseTimeFrom').val(item.courseTimeFrom);
+        $('#courseTimeTo').val(item.courseTimeTo);
+    }
+
+    function deleteClass(index) {
+        classes.splice(index, 1);
+        renderClasses();
+        updateCalendar();
+    }
+
+    $('#classForm').submit(function (event) {
         event.preventDefault();
-        const id = $('#classId').val();
-        const classData = {
+        const index = $('#classId').val();
+        const newClass = {
             courseCode: $('#courseCode').val(),
             courseTitle: $('#courseTitle').val(),
             lecturerName: $('#lecturerName').val(),
@@ -31,35 +56,15 @@ $(document).ready(function () {
             courseTimeTo: $('#courseTimeTo').val()
         };
 
-        if (id) {
-            classes[id] = classData;
+        if (index === '') {
+            classes.push(newClass);
         } else {
-            classes.push(classData);
+            classes[index] = newClass;
         }
 
-        $('#classForm')[0].reset();
-        $.mobile.navigate('#manageClassesPage');
         renderClasses();
-    });
-
-    $(document).on('click', '#classList a:not(.delete-class)', function () {
-        const id = $(this).data('id');
-        const classData = classes[id];
-        $('#classId').val(id);
-        $('#courseCode').val(classData.courseCode);
-        $('#courseTitle').val(classData.courseTitle);
-        $('#lecturerName').val(classData.lecturerName);
-        $('#building').val(classData.building);
-        $('#roomNumber').val(classData.roomNumber);
-        $('#courseDay').val(classData.courseDay);
-        $('#courseTimeFrom').val(classData.courseTimeFrom);
-        $('#courseTimeTo').val(classData.courseTimeTo);
-    });
-
-    $(document).on('click', '.delete-class', function () {
-        const id = $(this).data('id');
-        classes.splice(id, 1);
-        renderClasses();
+        updateCalendar();
+        $.mobile.changePage('#manageClassesPage');
     });
 
     // Manage Reminders - CRUD Operations
@@ -68,45 +73,45 @@ $(document).ready(function () {
         reminders.forEach((item, index) => {
             $('#reminderList').append(`
                 <li>
-                    <a href="#createReminderPage" data-id="${index}">${item.reminderTitle}</a>
-                    <a href="#" class="delete-reminder" data-id="${index}">Delete</a>
+                    <h2>${item.reminderTitle}</h2>
+                    <p>Time: ${item.reminderTime}</p>
+                    <a href="#createReminderPage" class="ui-btn ui-corner-all ui-shadow ui-btn-b" onclick="editReminder(${index})">Edit</a>
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-b" onclick="deleteReminder(${index})">Delete</a>
                 </li>
             `);
         });
-        $('#reminderList').listview('refresh');
     }
 
-    $('#reminderForm').on('submit', function (event) {
+    function editReminder(index) {
+        const item = reminders[index];
+        $('#reminderId').val(index);
+        $('#reminderTitle').val(item.reminderTitle);
+        $('#reminderTime').val(item.reminderTime);
+    }
+
+    function deleteReminder(index) {
+        reminders.splice(index, 1);
+        renderReminders();
+        updateCalendar();
+    }
+
+    $('#reminderForm').submit(function (event) {
         event.preventDefault();
-        const id = $('#reminderId').val();
-        const reminderData = {
+        const index = $('#reminderId').val();
+        const newReminder = {
             reminderTitle: $('#reminderTitle').val(),
             reminderTime: $('#reminderTime').val()
         };
 
-        if (id) {
-            reminders[id] = reminderData;
+        if (index === '') {
+            reminders.push(newReminder);
         } else {
-            reminders.push(reminderData);
+            reminders[index] = newReminder;
         }
 
-        $('#reminderForm')[0].reset();
-        $.mobile.navigate('#manageRemindersPage');
         renderReminders();
-    });
-
-    $(document).on('click', '#reminderList a:not(.delete-reminder)', function () {
-        const id = $(this).data('id');
-        const reminderData = reminders[id];
-        $('#reminderId').val(id);
-        $('#reminderTitle').val(reminderData.reminderTitle);
-        $('#reminderTime').val(reminderData.reminderTime);
-    });
-
-    $(document).on('click', '.delete-reminder', function () {
-        const id = $(this).data('id');
-        reminders.splice(id, 1);
-        renderReminders();
+        updateCalendar();
+        $.mobile.changePage('#manageRemindersPage');
     });
 
     // Manage Notes - CRUD Operations
@@ -115,45 +120,119 @@ $(document).ready(function () {
         notes.forEach((item, index) => {
             $('#noteList').append(`
                 <li>
-                    <a href="#createNotePage" data-id="${index}">Note ${index + 1}</a>
-                    <a href="#" class="delete-note" data-id="${index}">Delete</a>
+                    <h2>${item.noteTitle}</h2>
+                    <p>${item.noteContent}</p>
+                    <a href="#createNotePage" class="ui-btn ui-corner-all ui-shadow ui-btn-b" onclick="editNote(${index})">Edit</a>
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-b" onclick="deleteNote(${index})">Delete</a>
                 </li>
             `);
         });
-        $('#noteList').listview('refresh');
     }
 
-    $('#noteForm').on('submit', function (event) {
-        event.preventDefault();
-        const id = $('#noteId').val();
-        const noteData = $('#noteContent').val();
+    function editNote(index) {
+        const item = notes[index];
+        $('#noteId').val(index);
+        $('#noteTitle').val(item.noteTitle);
+        $('#noteContent').val(item.noteContent);
+    }
 
-        if (id) {
-            notes[id] = noteData;
+    function deleteNote(index) {
+        notes.splice(index, 1);
+        renderNotes();
+    }
+
+    $('#noteForm').submit(function (event) {
+        event.preventDefault();
+        const index = $('#noteId').val();
+        const newNote = {
+            noteTitle: $('#noteTitle').val(),
+            noteContent: $('#noteContent').val()
+        };
+
+        if (index === '') {
+            notes.push(newNote);
         } else {
-            notes.push(noteData);
+            notes[index] = newNote;
         }
 
-        $('#noteForm')[0].reset();
-        $.mobile.navigate('#manageNotesPage');
         renderNotes();
+        $.mobile.changePage('#manageNotesPage');
     });
 
-    $(document).on('click', '#noteList a:not(.delete-note)', function () {
-        const id = $(this).data('id');
-        const noteData = notes[id];
-        $('#noteId').val(id);
-        $('#noteContent').val(noteData);
+    // Calendar Management
+    function updateCalendar() {
+        $('#calendar').fullCalendar('destroy');
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: true,
+            events: getCalendarEvents()
+        });
+    }
+
+    function getCalendarEvents() {
+        let events = [];
+
+        classes.forEach((item) => {
+            events.push({
+                title: `${item.courseCode} - ${item.courseTitle}`,
+                start: moment().day(item.courseDay).format('YYYY-MM-DD') + 'T' + item.courseTimeFrom,
+                end: moment().day(item.courseDay).format('YYYY-MM-DD') + 'T' + item.courseTimeTo
+            });
+        });
+
+        reminders.forEach((item) => {
+            events.push({
+                title: item.reminderTitle,
+                start: item.reminderTime,
+                allDay: false
+            });
+        });
+
+        return events;
+    }
+
+    // Manage Calendar Events
+    function renderCalendarEvents() {
+        $('#eventList').empty();
+        events.forEach((item, index) => {
+            $('#eventList').append(`
+                <li>
+                    <h2>${item.title}</h2>
+                    <p>Start: ${item.start}</p>
+                    <p>End: ${item.end || 'N/A'}</p>
+                    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-b" onclick="deleteEvent(${index})">Delete</a>
+                </li>
+            `);
+        });
+    }
+
+    function deleteEvent(index) {
+        events.splice(index, 1);
+        renderCalendarEvents();
+        updateCalendar();
+    }
+
+    $('#addEventBtn').click(function () {
+        // Code to add a new event (e.g., show a form for event creation)
+        // For simplicity, this example assumes a prompt-based interface
+        const title = prompt("Event Title:");
+        const start = prompt("Event Start (YYYY-MM-DDTHH:MM:SS):");
+        const end = prompt("Event End (YYYY-MM-DDTHH:MM:SS):");
+
+        if (title && start) {
+            events.push({ title, start, end });
+            renderCalendarEvents();
+            updateCalendar();
+        }
     });
 
-    $(document).on('click', '.delete-note', function () {
-        const id = $(this).data('id');
-        notes.splice(id, 1);
-        renderNotes();
-    });
-
-    // Initialize by rendering all lists
+    // Initialize by rendering all lists and calendar
     renderClasses();
     renderReminders();
     renderNotes();
+    updateCalendar();
 });
