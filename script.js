@@ -1,220 +1,159 @@
 $(document).ready(function () {
-    let tableCreated = false;
+    let classes = [];
+    let reminders = [];
+    let notes = [];
 
-    $('#createClassTable').click(function () {
-        tableCreated = true;
-        $('#formSection').show();
-        $('#reminderSection').hide();
-        $('#calendarSection').hide();
-        $('#notesSection').hide();
-        alert('Class Table Created');
-    });
-
-    $('#createOtherTable').click(function () {
-        tableCreated = true;
-        $('#formSection').show();
-        $('#reminderSection').hide();
-        $('#calendarSection').hide();
-        $('#notesSection').hide();
-        alert('Other Table Created');
-    });
-
-    $('#viewTable').click(function () {
-        if (!tableCreated) {
-            alert('Please Create a Table First');
-        } else {
-            $('#viewSection').show();
-            displayCourses();
-            displayReminders();
-            displayNotes();
-        }
-    });
-
-    $('#createReminder').click(function () {
-        $('#reminderSection').show();
-        $('#formSection').hide();
-        $('#calendarSection').hide();
-        $('#notesSection').hide();
-    });
-
-    $('#createCalendar').click(function () {
-        $('#calendarSection').show();
-        $('#formSection').hide();
-        $('#reminderSection').hide();
-        $('#notesSection').hide();
-        generateCalendar();
-    });
-
-    $('#takeNotes').click(function () {
-        $('#notesSection').show();
-        $('#formSection').hide();
-        $('#reminderSection').hide();
-        $('#calendarSection').hide();
-    });
-
-    // Save Course
-    $('#saveCourse').click(function () {
-        const courseCode = $('#courseCode').val();
-        const courseTitle = $('#courseTitle').val();
-        const lecturerName = $('#lecturerName').val();
-        const building = $('#building').val();
-        const roomNumber = $('#roomNumber').val();
-        const courseDay = $('#courseDay').val();
-        const courseTimeFrom = $('#courseTimeFrom').val();
-        const courseTimeTo = $('#courseTimeTo').val();
-
-        if (courseCode && courseTitle) {
-            const course = {
-                courseCode,
-                courseTitle,
-                lecturerName,
-                building,
-                roomNumber,
-                courseDay,
-                courseTimeFrom,
-                courseTimeTo
-            };
-            
-            saveToLocalStorage('courses', course);
-            alert('Course Saved');
-            clearForm();
-        } else {
-            alert('Please fill in all required fields.');
-        }
-    });
-
-    // Save Reminder
-    $('#saveReminder').click(function () {
-        const reminderTitle = $('#reminderTitle').val();
-        const reminderTime = $('#reminderTime').val();
-
-        if (reminderTitle && reminderTime) {
-            const reminder = {
-                title: reminderTitle,
-                time: reminderTime
-            };
-            
-            saveToLocalStorage('reminders', reminder);
-            alert('Reminder Saved');
-            $('#reminderTitle').val('');
-            $('#reminderTime').val('');
-        } else {
-            alert('Please fill in all required fields.');
-        }
-    });
-
-    // Save Note
-    $('#saveNote').click(function () {
-        const noteContent = $('#noteContent').val();
-
-        if (noteContent) {
-            saveToLocalStorage('notes', noteContent);
-            alert('Note Saved');
-            $('#noteContent').val('');
-        } else {
-            alert('Please write some content.');
-        }
-    });
-
-    // Display Courses
-    function displayCourses() {
-        let courses = getFromLocalStorage('courses');
-        const courseList = $('#courseList');
-        courseList.empty();
-        
-        $.each(courses, function (index, course) {
-            let listItem = $('<li class="list-group-item"></li>').text(`${course.courseCode}: ${course.courseTitle} - ${course.lecturerName}`);
-            courseList.append(listItem);
+    // Manage Classes - CRUD Operations
+    function renderClasses() {
+        $('#classList').empty();
+        classes.forEach((item, index) => {
+            $('#classList').append(`
+                <li>
+                    <a href="#createClassPage" data-id="${index}">${item.courseCode} - ${item.courseTitle}</a>
+                    <a href="#" class="delete-class" data-id="${index}">Delete</a>
+                </li>
+            `);
         });
+        $('#classList').listview('refresh');
     }
 
-    // Display Reminders
-    function displayReminders() {
-        let reminders = getFromLocalStorage('reminders');
-        const reminderList = $('#reminderList');
-        reminderList.empty();
-
-        $.each(reminders, function (index, reminder) {
-            let reminderTimeFormatted = moment(reminder.time).format('MMMM Do YYYY, h:mm:ss a');
-            let listItem = $('<li class="list-group-item"></li>').text(`${reminder.title} - ${reminderTimeFormatted}`);
-            reminderList.append(listItem);
-        });
-    }
-
-    // Display Notes
-    function displayNotes() {
-        let notes = getFromLocalStorage('notes');
-        const noteList = $('#noteList');
-        noteList.empty();
-
-        $.each(notes, function (index, note) {
-            let listItem = $('<li class="list-group-item"></li>').text(note);
-            noteList.append(listItem);
-        });
-    }
-
-    // Save to Local Storage
-    function saveToLocalStorage(key, item) {
-        let items = JSON.parse(localStorage.getItem(key)) || [];
-        items.push(item);
-        localStorage.setItem(key, JSON.stringify(items));
-    }
-
-    // Get from Local Storage
-    function getFromLocalStorage(key) {
-        return JSON.parse(localStorage.getItem(key)) || [];
-    }
-
-    // Generate a simple Calendar (Placeholder, for demo purposes)
-    function generateCalendar() {
-        $('#calendar').text('This is where the calendar would be displayed.');
-    }
-
-    function clearForm() {
-        $('#courseCode').val('');
-        $('#courseTitle').val('');
-        $('#lecturerName').val('');
-        $('#building').val('');
-        $('#roomNumber').val('');
-        $('#courseDay').val('');
-        $('#courseTimeFrom').val('');
-        $('#courseTimeTo').val('');
-    }
-});
-$(document).on('pageinit', '#createClassTablePage', function () {
-    $('#classTableForm').on('submit', function (event) {
+    $('#classForm').on('submit', function (event) {
         event.preventDefault();
-        // Handle form submission for creating a class table
-        const courseCode = $('#courseCode').val();
-        const courseTitle = $('#courseTitle').val();
-        const lecturerName = $('#lecturerName').val();
-        const building = $('#building').val();
-        const roomNumber = $('#roomNumber').val();
-        const courseDay = $('#courseDay').val();
-        const courseTimeFrom = $('#courseTimeFrom').val();
-        const courseTimeTo = $('#courseTimeTo').val();
-        // Save data logic here
-        alert('Class Table Saved');
-    });
-});
+        const id = $('#classId').val();
+        const classData = {
+            courseCode: $('#courseCode').val(),
+            courseTitle: $('#courseTitle').val(),
+            lecturerName: $('#lecturerName').val(),
+            building: $('#building').val(),
+            roomNumber: $('#roomNumber').val(),
+            courseDay: $('#courseDay').val(),
+            courseTimeFrom: $('#courseTimeFrom').val(),
+            courseTimeTo: $('#courseTimeTo').val()
+        };
 
-$(document).on('pageinit', '#createReminderPage', function () {
+        if (id) {
+            classes[id] = classData;
+        } else {
+            classes.push(classData);
+        }
+
+        $('#classForm')[0].reset();
+        $.mobile.navigate('#manageClassesPage');
+        renderClasses();
+    });
+
+    $(document).on('click', '#classList a:not(.delete-class)', function () {
+        const id = $(this).data('id');
+        const classData = classes[id];
+        $('#classId').val(id);
+        $('#courseCode').val(classData.courseCode);
+        $('#courseTitle').val(classData.courseTitle);
+        $('#lecturerName').val(classData.lecturerName);
+        $('#building').val(classData.building);
+        $('#roomNumber').val(classData.roomNumber);
+        $('#courseDay').val(classData.courseDay);
+        $('#courseTimeFrom').val(classData.courseTimeFrom);
+        $('#courseTimeTo').val(classData.courseTimeTo);
+    });
+
+    $(document).on('click', '.delete-class', function () {
+        const id = $(this).data('id');
+        classes.splice(id, 1);
+        renderClasses();
+    });
+
+    // Manage Reminders - CRUD Operations
+    function renderReminders() {
+        $('#reminderList').empty();
+        reminders.forEach((item, index) => {
+            $('#reminderList').append(`
+                <li>
+                    <a href="#createReminderPage" data-id="${index}">${item.reminderTitle}</a>
+                    <a href="#" class="delete-reminder" data-id="${index}">Delete</a>
+                </li>
+            `);
+        });
+        $('#reminderList').listview('refresh');
+    }
+
     $('#reminderForm').on('submit', function (event) {
         event.preventDefault();
-        // Handle form submission for creating a reminder
-        const reminderTitle = $('#reminderTitle').val();
-        const reminderTime = $('#reminderTime').val();
-        // Save reminder logic here
-        alert('Reminder Saved');
-    });
-});
+        const id = $('#reminderId').val();
+        const reminderData = {
+            reminderTitle: $('#reminderTitle').val(),
+            reminderTime: $('#reminderTime').val()
+        };
 
-$(document).on('pageinit', '#takeNotesPage', function () {
+        if (id) {
+            reminders[id] = reminderData;
+        } else {
+            reminders.push(reminderData);
+        }
+
+        $('#reminderForm')[0].reset();
+        $.mobile.navigate('#manageRemindersPage');
+        renderReminders();
+    });
+
+    $(document).on('click', '#reminderList a:not(.delete-reminder)', function () {
+        const id = $(this).data('id');
+        const reminderData = reminders[id];
+        $('#reminderId').val(id);
+        $('#reminderTitle').val(reminderData.reminderTitle);
+        $('#reminderTime').val(reminderData.reminderTime);
+    });
+
+    $(document).on('click', '.delete-reminder', function () {
+        const id = $(this).data('id');
+        reminders.splice(id, 1);
+        renderReminders();
+    });
+
+    // Manage Notes - CRUD Operations
+    function renderNotes() {
+        $('#noteList').empty();
+        notes.forEach((item, index) => {
+            $('#noteList').append(`
+                <li>
+                    <a href="#createNotePage" data-id="${index}">Note ${index + 1}</a>
+                    <a href="#" class="delete-note" data-id="${index}">Delete</a>
+                </li>
+            `);
+        });
+        $('#noteList').listview('refresh');
+    }
+
     $('#noteForm').on('submit', function (event) {
         event.preventDefault();
-        // Handle form submission for taking notes
-        const noteContent = $('#noteContent').val();
-        // Save note logic here
-        alert('Note Saved');
+        const id = $('#noteId').val();
+        const noteData = $('#noteContent').val();
+
+        if (id) {
+            notes[id] = noteData;
+        } else {
+            notes.push(noteData);
+        }
+
+        $('#noteForm')[0].reset();
+        $.mobile.navigate('#manageNotesPage');
+        renderNotes();
     });
+
+    $(document).on('click', '#noteList a:not(.delete-note)', function () {
+        const id = $(this).data('id');
+        const noteData = notes[id];
+        $('#noteId').val(id);
+        $('#noteContent').val(noteData);
+    });
+
+    $(document).on('click', '.delete-note', function () {
+        const id = $(this).data('id');
+        notes.splice(id, 1);
+        renderNotes();
+    });
+
+    // Initialize by rendering all lists
+    renderClasses();
+    renderReminders();
+    renderNotes();
 });
