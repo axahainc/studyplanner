@@ -1,17 +1,63 @@
 $(document).on('pageinit', function () {
-    // Load data from localStorage or initialize empty arrays if not found
+    // Initial setup and load from localStorage
     let classes = JSON.parse(localStorage.getItem('classes')) || [];
     let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
     let notes = JSON.parse(localStorage.getItem('notes')) || [];
     let events = JSON.parse(localStorage.getItem('events')) || [];
 
-    // Save the data to localStorage
+    // Request Notification Permission
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
+
+    // Save data to localStorage
     function saveData() {
         localStorage.setItem('classes', JSON.stringify(classes));
         localStorage.setItem('reminders', JSON.stringify(reminders));
         localStorage.setItem('notes', JSON.stringify(notes));
         localStorage.setItem('events', JSON.stringify(events));
     }
+
+    // Helper function to show notifications
+    function showNotification(title, body) {
+        if (Notification.permission === 'granted') {
+            new Notification(title, {
+                body: body,
+                icon: 'icon.png' // Add an icon if you have one
+            });
+        }
+    }
+
+    // Function to check and notify
+    function checkAndNotify() {
+        const now = new Date();
+        const currentTime = now.toTimeString().split(' ')[0]; // Get HH:MM:SS
+
+        // Notify for Classes
+        classes.forEach(item => {
+            if (item.courseDay === now.toLocaleString('en-us', { weekday: 'long' }) &&
+                item.courseTimeFrom === currentTime) {
+                showNotification(`Class Reminder`, `It's time for ${item.courseCode} - ${item.courseTitle}`);
+            }
+        });
+
+        // Notify for Reminders
+        reminders.forEach(item => {
+            if (item.reminderTime === now.toISOString().substring(0, 19)) {
+                showNotification(`Reminder`, item.reminderTitle);
+            }
+        });
+
+        // Notify for Calendar Events
+        events.forEach(item => {
+            if (item.start === now.toISOString().substring(0, 19)) {
+                showNotification(`Event Reminder`, item.title);
+            }
+        });
+    }
+
+    // Set up interval to check for notifications every minute
+    setInterval(checkAndNotify, 60000);
 
     // Manage Classes - CRUD Operations
     function renderClasses() {
