@@ -5,10 +5,64 @@ $(document).on('pageinit', function () {
     let notes = JSON.parse(localStorage.getItem('notes')) || [];
     let events = JSON.parse(localStorage.getItem('events')) || [];
 
-    // Request Notification Permission
-    if (Notification.permission !== 'granted') {
-        Notification.requestPermission();
+   // Request Notification Permission
+if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+    Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+            console.log('Notification permission granted.');
+        } else {
+            console.log('Notification permission denied.');
+        }
+    });
+}
+
+// Helper function to show notifications
+function showNotification(title, body) {
+    if (Notification.permission === 'granted') {
+        new Notification(title, {
+            body: body,
+            icon: 'icon.png' // Optional: specify an icon if you have one
+        });
+        console.log(`Notification shown: ${title} - ${body}`);
+    } else {
+        console.log('Notifications are not permitted.');
     }
+}
+
+// Function to check and notify
+function checkAndNotify() {
+    const now = new Date();
+    const currentTime = now.toTimeString().split(' ')[0]; // Get HH:MM:SS
+    const currentISOString = now.toISOString().substring(0, 19); // Get YYYY-MM-DDTHH:MM:SS
+
+    console.log(`Checking notifications at ${currentTime} / ${currentISOString}`);
+
+    // Notify for Classes
+    classes.forEach(item => {
+        if (item.courseDay === now.toLocaleString('en-us', { weekday: 'long' }) &&
+            item.courseTimeFrom === currentTime) {
+            showNotification(`Class Reminder`, `It's time for ${item.courseCode} - ${item.courseTitle}`);
+        }
+    });
+
+    // Notify for Reminders
+    reminders.forEach(item => {
+        if (item.reminderTime === currentISOString) {
+            showNotification(`Reminder`, item.reminderTitle);
+        }
+    });
+
+    // Notify for Calendar Events
+    events.forEach(item => {
+        if (item.start === currentISOString) {
+            showNotification(`Event Reminder`, item.title);
+        }
+    });
+}
+
+// Set up interval to check for notifications every minute
+setInterval(checkAndNotify, 60000);
+
 
     // Save data to localStorage
     function saveData() {
