@@ -1,8 +1,17 @@
 $(document).on('pageinit', function () {
-    let classes = [];
-    let reminders = [];
-    let notes = [];
-    let events = [];
+    // Load data from localStorage or initialize empty arrays if not found
+    let classes = JSON.parse(localStorage.getItem('classes')) || [];
+    let reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+    let notes = JSON.parse(localStorage.getItem('notes')) || [];
+    let events = JSON.parse(localStorage.getItem('events')) || [];
+
+    // Save the data to localStorage
+    function saveData() {
+        localStorage.setItem('classes', JSON.stringify(classes));
+        localStorage.setItem('reminders', JSON.stringify(reminders));
+        localStorage.setItem('notes', JSON.stringify(notes));
+        localStorage.setItem('events', JSON.stringify(events));
+    }
 
     // Manage Classes - CRUD Operations
     function renderClasses() {
@@ -38,6 +47,7 @@ $(document).on('pageinit', function () {
 
     function deleteClass(index) {
         classes.splice(index, 1);
+        saveData(); // Save to localStorage
         renderClasses();
         updateCalendar();
     }
@@ -62,6 +72,7 @@ $(document).on('pageinit', function () {
             classes[index] = newClass;
         }
 
+        saveData(); // Save to localStorage
         renderClasses();
         updateCalendar();
         $.mobile.changePage('#manageClassesPage');
@@ -91,6 +102,7 @@ $(document).on('pageinit', function () {
 
     function deleteReminder(index) {
         reminders.splice(index, 1);
+        saveData(); // Save to localStorage
         renderReminders();
         updateCalendar();
     }
@@ -109,6 +121,7 @@ $(document).on('pageinit', function () {
             reminders[index] = newReminder;
         }
 
+        saveData(); // Save to localStorage
         renderReminders();
         updateCalendar();
         $.mobile.changePage('#manageRemindersPage');
@@ -138,6 +151,7 @@ $(document).on('pageinit', function () {
 
     function deleteNote(index) {
         notes.splice(index, 1);
+        saveData(); // Save to localStorage
         renderNotes();
     }
 
@@ -155,6 +169,7 @@ $(document).on('pageinit', function () {
             notes[index] = newNote;
         }
 
+        saveData(); // Save to localStorage
         renderNotes();
         $.mobile.changePage('#manageNotesPage');
     });
@@ -212,6 +227,7 @@ $(document).on('pageinit', function () {
 
     function deleteEvent(index) {
         events.splice(index, 1);
+        saveData(); // Save to localStorage
         renderCalendarEvents();
         updateCalendar();
     }
@@ -225,6 +241,7 @@ $(document).on('pageinit', function () {
 
         if (title && start) {
             events.push({ title, start, end });
+            saveData(); // Save to localStorage
             renderCalendarEvents();
             updateCalendar();
         }
@@ -234,5 +251,6 @@ $(document).on('pageinit', function () {
     renderClasses();
     renderReminders();
     renderNotes();
+    renderCalendarEvents();
     updateCalendar();
 });
