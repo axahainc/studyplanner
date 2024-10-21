@@ -5,80 +5,37 @@ $(document).on('pageinit', function () {
     let notes = JSON.parse(localStorage.getItem('notes')) || [];
     let events = JSON.parse(localStorage.getItem('events')) || [];
 
-   // Request Notification Permission
-if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-    Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-            console.log('Notification permission granted.');
-        } else {
-            console.log('Notification permission denied.');
-        }
-    });
-}
-
-// Helper function to show notifications
-function showNotification(title, body) {
-    if (Notification.permission === 'granted') {
-        new Notification(title, {
-            body: body,
-            icon: 'icon.png' // Optional: specify an icon if you have one
+    // Request Notification Permission
+    if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+            } else {
+                console.log('Notification permission denied.');
+            }
         });
-        console.log(`Notification shown: ${title} - ${body}`);
-    } else {
-        console.log('Notifications are not permitted.');
-    }
-}
-
-// Function to check and notify
-function checkAndNotify() {
-    const now = new Date();
-    const currentTime = now.toTimeString().split(' ')[0]; // Get HH:MM:SS
-    const currentISOString = now.toISOString().substring(0, 19); // Get YYYY-MM-DDTHH:MM:SS
-
-    console.log(`Checking notifications at ${currentTime} / ${currentISOString}`);
-
-    // Notify for Classes
-    classes.forEach(item => {
-        if (item.courseDay === now.toLocaleString('en-us', { weekday: 'long' }) &&
-            item.courseTimeFrom === currentTime) {
-            showNotification(`Class Reminder`, `It's time for ${item.courseCode} - ${item.courseTitle}`);
-        }
-    });
-
-    // Notify for Reminders
-    reminders.forEach(item => {
-        if (item.reminderTime === currentISOString) {
-            showNotification(`Reminder`, item.reminderTitle);
-        }
-    });
-
-    // Notify for Calendar Events
-    events.forEach(item => {
-        if (item.start === currentISOString) {
-            showNotification(`Event Reminder`, item.title);
-        }
-    });
-}
-
-// Set up interval to check for notifications every minute
-setInterval(checkAndNotify, 60000);
-
-
-    // Save data to localStorage
-    function saveData() {
-        localStorage.setItem('classes', JSON.stringify(classes));
-        localStorage.setItem('reminders', JSON.stringify(reminders));
-        localStorage.setItem('notes', JSON.stringify(notes));
-        localStorage.setItem('events', JSON.stringify(events));
     }
 
-    // Helper function to show notifications
+    // Helper function to show notifications with sound and vibration
     function showNotification(title, body) {
         if (Notification.permission === 'granted') {
             new Notification(title, {
                 body: body,
-                icon: 'icon.png' // Add an icon if you have one
+                icon: 'icon.png' // Optional: specify an icon if you have one
             });
+
+            // Play notification sound
+            let audio = new Audio('notification-sound.mp3'); // Add your sound file here
+            audio.play();
+
+            // Vibrate the device
+            if ('vibrate' in navigator) {
+                navigator.vibrate(200); // Vibrate for 200ms
+            }
+
+            console.log(`Notification shown: ${title} - ${body}`);
+        } else {
+            console.log('Notifications are not permitted.');
         }
     }
 
@@ -86,6 +43,9 @@ setInterval(checkAndNotify, 60000);
     function checkAndNotify() {
         const now = new Date();
         const currentTime = now.toTimeString().split(' ')[0]; // Get HH:MM:SS
+        const currentISOString = now.toISOString().substring(0, 19); // Get YYYY-MM-DDTHH:MM:SS
+
+        console.log(`Checking notifications at ${currentTime} / ${currentISOString}`);
 
         // Notify for Classes
         classes.forEach(item => {
@@ -97,14 +57,14 @@ setInterval(checkAndNotify, 60000);
 
         // Notify for Reminders
         reminders.forEach(item => {
-            if (item.reminderTime === now.toISOString().substring(0, 19)) {
+            if (item.reminderTime === currentISOString) {
                 showNotification(`Reminder`, item.reminderTitle);
             }
         });
 
         // Notify for Calendar Events
         events.forEach(item => {
-            if (item.start === now.toISOString().substring(0, 19)) {
+            if (item.start === currentISOString) {
                 showNotification(`Event Reminder`, item.title);
             }
         });
@@ -146,10 +106,12 @@ setInterval(checkAndNotify, 60000);
     }
 
     function deleteClass(index) {
-        classes.splice(index, 1);
-        saveData(); // Save to localStorage
-        renderClasses();
-        updateCalendar();
+        if (confirm('Are you sure you want to delete this class?')) {
+            classes.splice(index, 1);
+            saveData(); // Save to localStorage
+            renderClasses();
+            updateCalendar();
+        }
     }
 
     $('#classForm').submit(function (event) {
@@ -201,10 +163,12 @@ setInterval(checkAndNotify, 60000);
     }
 
     function deleteReminder(index) {
-        reminders.splice(index, 1);
-        saveData(); // Save to localStorage
-        renderReminders();
-        updateCalendar();
+        if (confirm('Are you sure you want to delete this reminder?')) {
+            reminders.splice(index, 1);
+            saveData(); // Save to localStorage
+            renderReminders();
+            updateCalendar();
+        }
     }
 
     $('#reminderForm').submit(function (event) {
@@ -250,9 +214,11 @@ setInterval(checkAndNotify, 60000);
     }
 
     function deleteNote(index) {
-        notes.splice(index, 1);
-        saveData(); // Save to localStorage
-        renderNotes();
+        if (confirm('Are you sure you want to delete this note?')) {
+            notes.splice(index, 1);
+            saveData(); // Save to localStorage
+            renderNotes();
+        }
     }
 
     $('#noteForm').submit(function (event) {
@@ -326,15 +292,15 @@ setInterval(checkAndNotify, 60000);
     }
 
     function deleteEvent(index) {
-        events.splice(index, 1);
-        saveData(); // Save to localStorage
-        renderCalendarEvents();
-        updateCalendar();
+        if (confirm('Are you sure you want to delete this event?')) {
+            events.splice(index, 1);
+            saveData(); // Save to localStorage
+            renderCalendarEvents();
+            updateCalendar();
+        }
     }
 
     $('#addEventBtn').click(function () {
-        // Code to add a new event (e.g., show a form for event creation)
-        // For simplicity, this example assumes a prompt-based interface
         const title = prompt("Event Title:");
         const start = prompt("Event Start (YYYY-MM-DDTHH:MM:SS):");
         const end = prompt("Event End (YYYY-MM-DDTHH:MM:SS):");
